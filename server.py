@@ -36,3 +36,33 @@ def register(cmd):
                     break
     else:
         print("Invalid privilege entered.")
+def login(cmd):
+    cmd=cmd.split(' ')
+    f=open("admin.txt","r")
+    contents=f.read()
+    contents=contents.split(" ")
+    f.close()
+    for i in range(0,len(contents)):
+        if i%2==0:
+            if cmd[1]==contents[i]:
+                if cmd[2]==contents[i+1]:
+                    print("Login succesful - Admin")
+                    return("admin")
+                else:
+                    print("Login Unsuccesful - Wrong Password")
+                    break
+            else:
+                f=open("user.txt","r")
+                content=f.read()
+                content=content.split(" ")
+                f.close()
+                for i in range(0,len(content)):
+                    if i%2==0:
+                        if cmd[1]==content[i]:
+                            if cmd[2]==content[i+1]:
+                                print("Login succesful - User")
+                                return("user")
+                            else:
+                                print("Login Unsuccesful - Wrong Password")
+                                break
+            print("Username does not exist")
