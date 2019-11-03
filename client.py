@@ -1,7 +1,9 @@
+'''This module contains the main file of Client and defines all the functionalities of the client'''
 import asyncio
 print("**************  WELCOME TO ALPHA CLEINT SERVER FILE MANAGMENT SYSTEM  **************")
 CMD = []
 async def tcp_echo_client():
+    '''This function defines the connection of the client with the server and functionalities.'''
     reader, writer = await asyncio.open_connection(
         '127.0.0.1', 8080)
     message = ''
@@ -55,6 +57,7 @@ async def tcp_echo_client():
             print(f'Received: {data}')
             continue
     def commands():
+        '''This function defines information about all available commands and usage they have.'''
         print('''****************** LIST OF COMMANDS OF SERVER ******************
     -> command - change_folder <name>
         This command move the current working directory in the current folder.
