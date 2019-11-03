@@ -3,7 +3,7 @@
 ##### Steps to install and use the applications
 
 1. Clone the repo into your system from github using the command 
-    `git clone https://github.com/`
+    `git clone https://github.com/maheshmatta/Alpha`
    or you can use the zip file sent.
 
 2. Run the server.py file in one system terminal.
