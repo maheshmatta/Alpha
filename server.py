@@ -125,6 +125,101 @@ def read_file(cmd,x):
             recv = 'file doesn´t exist'
             print(recv)
             return recv
+def delete(cmd, addr):
+    ''' hi '''
+    if LSR[addr].values() == "admin":
+        cmd = cmd.split(" ")
+        f_a = open("admin.txt", "r")
+        temp = f_a.read()
+        f_a.close()
+        temp = temp.split(" ")
+        o_a = len(temp)
+        for i in range(0, o_a):
+            if LSR[addr].keys() == temp[i]:
+                if cmd[2] == temp[i+1]:
+                    g_a = open("user.txt", "r")
+                    delf = g_a.read()
+                    g_a.close()
+                    delf = delf.split(" ")
+                    w_a = len(delf)
+                    for i in range(0, w_a):
+                        if delf[i] == cmd[1]:
+                            del delf[i]
+                            g_a = open("user.txt", "w")
+                            g_a.write("")
+                            g_a.close()
+                            recv = " User deleted "
+                            return recv
+                        g_a = open("user.txt", "w")
+                        g_a.write("")
+                        g_a.close()
+                        recv = " User name not found "
+                        return recv
+                    r_a = len(delf)
+                    for i in range(0, r_a):
+                        g_a = open("user.txt", "a+")
+                        g_a.write(delf[i])
+                        g_a.write(" ")
+                        g_a.close()
+                else:
+                    recv = "Entered password wrong"
+                    return recv
+    else:
+        recv = " Command cannot be processed due to privilege issues."
+        return recv
+def lists(addr):
+    rec = []
+    for i in DIRE[addr[1]].keys():
+        temp1 = str(DIRE[addr[1]][i])
+    Files_a = os.listdir(temp1)
+    rec.append(["NAME", "SIZE IN BYTES", "CREATION TIME"])
+    for i in Files_a:
+        j = os.stat(i)
+        rec.append([i, j.st_size, time.ctime(j.st_mtime)])
+        p_a = "\n".join(str(s) for s in rec)
+    return p_a
+
+def create_folder(cmd, addr):
+    if os.getcwd() == ROOT:
+        recv = " folder cannot be created in ROOT folder"
+        return recv
+    for i in DIRE[addr[1]].keys():
+        temp1 = str(DIRE[addr[1]][i])
+    Files_a = os.listdir(temp1)
+    for i in range(0, len(Files_a)):
+        if Files_a[i] == cmd[1]:
+            recv = " folder name already exists "
+            return recv
+    os.mkdir(cmd[1])
+    recv = " folder created "
+    return recv
+
+def write_file(cmd):
+    if cmd[1] not in FI.keys():
+        FI[cmd[1]] = 1
+        if len(cmd) <= 2:
+            try:
+                f_a = open(cmd[1], "w")
+                f_a.write("")
+                f_a.close()
+                recv = " FIle cleared "
+            except PermissionError:
+                recv = " Permission denied to access this FIle "
+        else:
+            try:
+                for i in range(2, len(cmd)):
+                    f_a = open(cmd[1], "a+")
+                    f_a.write(cmd[i])
+                    f_a.write(" ")
+                    f_a.write("\n")
+                f_a.close()
+                recv = " FIle writing complete "
+            except PermissionError:
+                recv = " Permission denied to access this FIle "
+        del FI[cmd[1]]
+        return recv
+    recv = " FIle being used by other user. "
+    return recv
 '''x={}
 x=read_file("readfile aaa.txt",x)
 x=read_file("readfile ",x)
