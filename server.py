@@ -23,7 +23,7 @@ def register(cmd,addr):
         It is a bundle of the ip address and the port of the client.
     '''
     if cmd[-1] == "admin":
-        path =(f'{ROOT}\\admin.txt')
+        path =(f"{ROOT}\\admin.txt")
         f_a = open(path, "r")
         contents = f_a.read()
         contents = contents.split(" ")
@@ -41,6 +41,7 @@ def register(cmd,addr):
                 f_a.write(cmd[2])
                 f_a.write(" ")
                 f_a.close()
+                os.chdir("root")
                 os.mkdir(cmd[1])
                 os.chdir(cmd[1])
                 DIRE[addr[1]] = {cmd[1]:str(os.getcwd())}
@@ -65,6 +66,7 @@ def register(cmd,addr):
                 f_a.write(cmd[2])
                 f_a.write(" ")
                 f_a.close()
+                os.chdir("root")
                 os.mkdir(cmd[1])
                 os.chdir(cmd[1])
                 DIRE[addr[1]] = {cmd[1]:str(os.getcwd())}
@@ -97,6 +99,8 @@ def login(cmd, addr):
                 if cmd[1] == contents[i]:
                     if cmd[2] == contents[i+1]:
                         recv = "Login succesful - Admin"
+                        os.chdir("root")
+                        os.chdir(cmd[1])
                         LS.append(cmd[1])
                         LSR[addr[1]] = {cmd[1]:"admin"}
                         DIRE[addr[1]] = {cmd[1]:str(os.getcwd())}
@@ -104,13 +108,15 @@ def login(cmd, addr):
                     recv = "Login Unsuccesful - Wrong Password"
                     return recv
                 path =(f'{ROOT}\\user.txt')
-                f_a = open("user.txt", "r")
+                f_a = open(path, "r")
                 content = f_a.read()
                 content = content.split(" ")
                 f_a.close()
                 tem = len(content)
                 if cmd[1] == content[i]:
                     if cmd[2] == content[i+1]:
+                        os.chdir("root")
+                        os.chdir(cmd[1])
                         recv = "Login succesful - User"
                         LS.append(cmd[1])
                         LSR[addr[1]] = {cmd[1]:"user"}
@@ -188,12 +194,15 @@ def lists(addr):
         temp1 = str(DIRE[addr[1]][i])
     Files_a = os.listdir(temp1)
     rec.append(["NAME", "SIZE IN BYTES", "CREATION TIME"])
+    if len(Files_a) == 0:
+        p_a = " No files found "
+        return p_a
     for i in Files_a:
         j = os.stat(i)
         rec.append([i, j.st_size, time.ctime(j.st_mtime)])
         p_a = "\n".join(str(s) for s in rec)
     return p_a
-
+    
 def create_folder(cmd, addr):
     '''create_folder creates a new folder in the present working directory of the client.
     Folder cannot be created if the name of folder already exists.
@@ -268,7 +277,8 @@ def change_folder(cmd, addr):
     for i in DIRE[addr[1]].keys():
         temp1 = str(DIRE[addr[1]][i])
     os.chdir(temp1)
-    if os.getcwd() == ROOT:
+    e_a = (f'{ROOT}\\root')
+    if os.getcwd() == e_a:
         if cmd[1] == "..":
             recv = " Cant move back from ROOT folder "
             return recv
@@ -280,7 +290,7 @@ def change_folder(cmd, addr):
                             os.chdir(cmd[1])
                             for i in DIRE[addr[1]].keys():
                                 DIRE[addr[1]] = {i:str(os.getcwd())}
-                            recv = " Current working DIREctory changed "
+                            recv = " Current working Directory changed "
                             return recv
                         recv = " Permission denied to access FIle "
                         return recv
@@ -288,7 +298,7 @@ def change_folder(cmd, addr):
                         os.chdir(cmd[1])
                         for i in DIRE[addr[1]].keys():
                             DIRE[addr[1]] = {i:str(os.getcwd())}
-                            recv = " Current working DIREctory changed "
+                            recv = " Current working Directory changed "
                             return recv
                     recv = " Permission denied to access FIle "
                     return recv
