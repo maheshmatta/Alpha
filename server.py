@@ -41,7 +41,8 @@ def register(cmd,addr):
                 f_a.write(cmd[2])
                 f_a.write(" ")
                 f_a.close()
-                os.chdir("root")
+                path =(f'{ROOT}\\root')
+                os.chdir(path)
                 os.mkdir(cmd[1])
                 os.chdir(cmd[1])
                 DIRE[addr[1]] = {cmd[1]:str(os.getcwd())}
@@ -66,7 +67,8 @@ def register(cmd,addr):
                 f_a.write(cmd[2])
                 f_a.write(" ")
                 f_a.close()
-                os.chdir("root")
+                path =(f'{ROOT}\\root')
+                os.chdir(path)
                 os.mkdir(cmd[1])
                 os.chdir(cmd[1])
                 DIRE[addr[1]] = {cmd[1]:str(os.getcwd())}
@@ -99,7 +101,8 @@ def login(cmd, addr):
                 if cmd[1] == contents[i]:
                     if cmd[2] == contents[i+1]:
                         recv = "Login succesful - Admin"
-                        os.chdir("root")
+                        path =(f'{ROOT}\\root')
+                        os.chdir(path)
                         os.chdir(cmd[1])
                         LS.append(cmd[1])
                         LSR[addr[1]] = {cmd[1]:"admin"}
@@ -115,7 +118,8 @@ def login(cmd, addr):
                 tem = len(content)
                 if cmd[1] == content[i]:
                     if cmd[2] == content[i+1]:
-                        os.chdir("root")
+                        path =(f'{ROOT}\\root')
+                        os.chdir(path)
                         os.chdir(cmd[1])
                         recv = "Login succesful - User"
                         LS.append(cmd[1])
@@ -140,7 +144,9 @@ def delete(cmd, addr):
     addr:
         It is a bundle of the ip address and the port of the client.
     '''
-    if LSR[addr].values() == "admin":
+    q=(str(LSR[addr[1]].values()))
+    print(q)
+    if LSR[addr[1]].values() == 'admin':
         cmd = cmd.split(" ")
         f_a = open("admin.txt", "r")
         temp = f_a.read()
@@ -394,7 +400,7 @@ def read_file(cmd, addr):
                     recv = "Reading FIle is closed"
                     return recv
                 else:
-                    recv = "FIle doesnÂ´t exist"
+                    recv = "FIle doesn´t exist"
                     return recv
 async def handle_echo(reader, writer):
     '''Establishes the connection between sender and receiver and performs read and write operations.
