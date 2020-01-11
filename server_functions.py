@@ -152,51 +152,61 @@ def delete(cmd, addr):
     try:
         pri_user = list(LSR[addr[1]].values())
         if pri_user[0] == 'admin':
-            path = os.path.join(ROOT, 'admin.txt')
-            f_a = open(path, "r")
-            temp = f_a.read()
-            f_a.close()
-            temp = temp.split(" ")
-            o_a = len(temp)
-            for i in range(0, o_a):
-                user_name = list(LSR[addr[1]].keys())
-                if user_name[0] == temp[i]:
-                    if cmd[2] == temp[i+1]:
-                        path = os.path.join(ROOT, 'user.txt')
-                        g_a = open(path, "r")
-                        delf = g_a.read()
-                        g_a.close()
-                        delf = delf.split(" ")
-                        w_a = len(delf)
-                        for i in range(0, w_a):
-                            if delf[i] == cmd[1]:
-                                del delf[i]
-                                temp = os.path.join(ROOT, 'root')
-                                path = os.path.join(temp, cmd[1])
-                                shutil.rmtree(path)
+            asr_user = dict(LSR.values())
+            '''keys=list()
+            for key in asr_user:
+                print(key)
+                keys.append(key)
+            print(keys)'''
+            if cmd[1] not in asr_user.keys() :
+                path = os.path.join(ROOT, 'admin.txt')
+                f_a = open(path, "r")
+                temp = f_a.read()
+                f_a.close()
+                temp = temp.split(" ")
+                o_a = len(temp)
+                for i in range(0, o_a):
+                    user_name = list(LSR[addr[1]].keys())
+                    if user_name[0] == temp[i]:
+                        if cmd[2] == temp[i+1]:
+                            path = os.path.join(ROOT, 'user.txt')
+                            g_a = open(path, "r")
+                            delf = g_a.read()
+                            g_a.close()
+                            delf = delf.split(" ")
+                            w_a = len(delf)
+                            for i in range(0, w_a):
+                                if delf[i] == cmd[1]:
+                                    del delf[i]
+                                    temp = os.path.join(ROOT, 'root')
+                                    path = os.path.join(temp, cmd[1])
+                                    shutil.rmtree(path)
+                                    path = os.path.join(ROOT, 'user.txt')
+                                    g_a = open(path, "w")
+                                    g_a.write("")
+                                    g_a.close()
+                                    recv = " User deleted "
+                                    assert recv is not None
+                                    return recv
                                 path = os.path.join(ROOT, 'user.txt')
                                 g_a = open(path, "w")
                                 g_a.write("")
                                 g_a.close()
-                                recv = " User deleted "
-                                assert recv is not None
+                                recv = " User name not found "
                                 return recv
-                            path = os.path.join(ROOT, 'user.txt')
-                            g_a = open(path, "w")
-                            g_a.write("")
-                            g_a.close()
-                            recv = " User name not found "
+                            r_a = len(delf)
+                            for i in range(0, r_a):
+                                path = os.path.join(ROOT, 'user.txt')
+                                g_a = open(path, "w")
+                                g_a.write(delf[i])
+                                g_a.write(" ")
+                                g_a.close()
+                        else:
+                            recv = "Entered password wrong"
                             return recv
-                        r_a = len(delf)
-                        for i in range(0, r_a):
-                            path = os.path.join(ROOT, 'user.txt')
-                            g_a = open(path, "w")
-                            g_a.write(delf[i])
-                            g_a.write(" ")
-                            g_a.close()
-                    else:
-                        recv = "Entered password wrong"
-                        return recv
+                else:
+                    recv = "The user is currently logged in."
+                    return recv
         else:
             recv = " Command cannot be processed due to privilege issues."
             return recv

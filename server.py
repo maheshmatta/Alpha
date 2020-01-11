@@ -97,39 +97,38 @@ def login(cmd, addr):
         f_a.close()
         tem = len(contents)
         for i in range(0, tem):
-            if i%2 == 0:
-                if cmd[1] == contents[i]:
-                    if cmd[2] == contents[i+1]:
-                        recv = "Login succesful - Admin"
-                        path =(f'{ROOT}\\root')
-                        os.chdir(path)
-                        os.chdir(cmd[1])
-                        LS.append(cmd[1])
-                        LSR[addr[1]] = {cmd[1]:"admin"}
-                        DIRE[addr[1]] = {cmd[1]:str(os.getcwd())}
-                        return recv
-                    recv = "Login Unsuccesful - Wrong Password"
+            if cmd[1] == contents[i]:
+                if cmd[2] == contents[i+1]:
+                    recv = "Login succesful - Admin"
+                    path =(f'{ROOT}\\root')
+                    os.chdir(path)
+                    os.chdir(cmd[1])
+                    LS.append(cmd[1])
+                    LSR[addr[1]] = {cmd[1]:"admin"}
+                    DIRE[addr[1]] = {cmd[1]:str(os.getcwd())}
                     return recv
-                path =(f'{ROOT}\\user.txt')
-                f_a = open(path, "r")
-                content = f_a.read()
-                content = content.split(" ")
-                f_a.close()
-                tem = len(content)
-                if cmd[1] == content[i]:
-                    if cmd[2] == content[i+1]:
-                        path =(f'{ROOT}\\root')
-                        os.chdir(path)
-                        os.chdir(cmd[1])
-                        recv = "Login succesful - User"
-                        LS.append(cmd[1])
-                        LSR[addr[1]] = {cmd[1]:"user"}
-                        DIRE[addr[1]] = {cmd[1]:str(os.getcwd())}
-                        return recv
-                    recv = "Login Unsuccesful - Wrong Password"
-                    return recv
-                recv = "Username does not exist"
+                recv = "Login Unsuccesful - Wrong Password"
                 return recv
+            path =(f'{ROOT}\\user.txt')
+            f_a = open(path, "r")
+            content = f_a.read()
+            content = content.split(" ")
+            f_a.close()
+            tem = len(content)
+            if cmd[1] == content[i]:
+                if cmd[2] == content[i+1]:
+                    path =(f'{ROOT}\\root')
+                    os.chdir(path)
+                    os.chdir(cmd[1])
+                    recv = "Login succesful - User"
+                    LS.append(cmd[1])
+                    LSR[addr[1]] = {cmd[1]:"user"}
+                    DIRE[addr[1]] = {cmd[1]:str(os.getcwd())}
+                    return recv
+                recv = "Login Unsuccesful - Wrong Password"
+                return recv
+        recv = "Username does not exist"
+        return recv
     recv = " User already logged in "
     return recv
 
@@ -144,45 +143,55 @@ def delete(cmd, addr):
     addr:
         It is a bundle of the ip address and the port of the client.
     '''
-    q=(str(LSR[addr[1]].values()))
+    q=(list(LSR[addr[1]].values()))
     print(q)
+    q=(list(LSR.values()))
+    print(q)
+    print(q[0].values())
+    if 'mahi' in q:
+        print('s')
+    else:
+        print('n')
     if LSR[addr[1]].values() == 'admin':
         cmd = cmd.split(" ")
-        f_a = open("admin.txt", "r")
-        temp = f_a.read()
-        f_a.close()
-        temp = temp.split(" ")
-        o_a = len(temp)
-        for i in range(0, o_a):
-            if LSR[addr].keys() == temp[i]:
-                if cmd[2] == temp[i+1]:
-                    g_a = open("user.txt", "r")
-                    delf = g_a.read()
-                    g_a.close()
-                    delf = delf.split(" ")
-                    w_a = len(delf)
-                    for i in range(0, w_a):
-                        if delf[i] == cmd[1]:
-                            del delf[i]
+        if cmd[1] not in LSR:
+            f_a = open("admin.txt", "r")
+            temp = f_a.read()
+            f_a.close()
+            temp = temp.split(" ")
+            o_a = len(temp)
+            for i in range(0, o_a):
+                if LSR[addr].keys() == temp[i]:
+                    if cmd[2] == temp[i+1]:
+                        g_a = open("user.txt", "r")
+                        delf = g_a.read()
+                        g_a.close()
+                        delf = delf.split(" ")
+                        w_a = len(delf)
+                        for i in range(0, w_a):
+                            if delf[i] == cmd[1]:
+                                del delf[i]
+                                g_a = open("user.txt", "w")
+                                g_a.write("")
+                                g_a.close()
+                                recv = " User deleted "
+                                return recv
                             g_a = open("user.txt", "w")
                             g_a.write("")
                             g_a.close()
-                            recv = " User deleted "
+                            recv = " User name not found "
                             return recv
-                        g_a = open("user.txt", "w")
-                        g_a.write("")
-                        g_a.close()
-                        recv = " User name not found "
+                        r_a = len(delf)
+                        for i in range(0, r_a):
+                            g_a = open("user.txt", "a+")
+                            g_a.write(delf[i])
+                            g_a.write(" ")
+                            g_a.close()
+                    else:
+                        recv = "Entered password wrong"
                         return recv
-                    r_a = len(delf)
-                    for i in range(0, r_a):
-                        g_a = open("user.txt", "a+")
-                        g_a.write(delf[i])
-                        g_a.write(" ")
-                        g_a.close()
-                else:
-                    recv = "Entered password wrong"
-                    return recv
+        else:
+            recv = " User currently logged in. "
     else:
         recv = " Command cannot be processed due to privilege issues."
         return recv
@@ -400,7 +409,7 @@ def read_file(cmd, addr):
                     recv = "Reading FIle is closed"
                     return recv
                 else:
-                    recv = "FIle doesn´t exist"
+                    recv = "FIle doesnï¿½t exist"
                     return recv
 async def handle_echo(reader, writer):
     '''Establishes the connection between sender and receiver and performs read and write operations.
