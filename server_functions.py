@@ -44,7 +44,11 @@ def register(cmd, addr):
                 f_a.close()
                 path =(f'{ROOT}\\root')
                 os.chdir(path)
-                os.mkdir(cmd[1])
+                try:
+                    os.mkdir(cmd[1])
+                except FileExistsError:
+                    recv = " Username already exists "
+                    return recv
                 os.chdir(cmd[1])
                 DIRE[addr[1]] = {cmd[1]:str(os.getcwd())}
                 recv = " Personal folder created "
@@ -152,13 +156,7 @@ def delete(cmd, addr):
     try:
         pri_user = list(LSR[addr[1]].values())
         if pri_user[0] == 'admin':
-            asr_user = dict(LSR.values())
-            '''keys=list()
-            for key in asr_user:
-                print(key)
-                keys.append(key)
-            print(keys)'''
-            if cmd[1] not in asr_user.keys() :
+            if cmd[1] not in LS:
                 path = os.path.join(ROOT, 'admin.txt')
                 f_a = open(path, "r")
                 temp = f_a.read()
@@ -204,14 +202,15 @@ def delete(cmd, addr):
                         else:
                             recv = "Entered password wrong"
                             return recv
-                else:
-                    recv = "The user is currently logged in."
-                    return recv
+            else:
+                recv = " User already logged in "
+                return recv                
         else:
             recv = " Command cannot be processed due to privilege issues."
             return recv
     except AssertionError:
         recv = 'There is no response for the command given'
+        return recv
 
 def lists(addr):
     '''
